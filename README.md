@@ -1,6 +1,7 @@
 # Model-Comparison-Tool
 interactive Streamlit app to evaluate ML models
 
+```
 Model-Comparison-Tool/
 │── app.py                # Streamlit UI
 │── data/
@@ -11,4 +12,4 @@ Model-Comparison-Tool/
 │    ├── models.py        # model registry
 │    ├── plots.py         # confusion, ROC, PR curves
 │    └── __init__.py
-
+```
