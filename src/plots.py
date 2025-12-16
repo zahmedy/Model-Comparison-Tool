@@ -48,7 +48,8 @@ def plot_roc_curve(y_true, y_scores, title="ROC Curve"):
     fpr, tpr, _ = roc_curve(y_true, y_scores)  # y_true must be 0/1
     roc_auc = auc(fpr, tpr)
 
-    ax.plot(fpr, tpr, lw=2, label=f"AUC = {roc_auc:.3f}")
+    # Plot line plus markers so points are visible
+    ax.plot(fpr, tpr, lw=2, marker="o", markersize=4, label=f"AUC = {roc_auc:.3f}")
     ax.plot([0, 1], [0, 1], linestyle="--")
 
     ax.set_xlabel("False Positive Rate")
@@ -64,10 +65,10 @@ def plot_precision_recall(y_true, y_scores, title="Precision-Recall Curve"):
 
     precision, recall, _ = precision_recall_curve(y_true, y_scores)
 
-    ax.plot(recall, precision, lw=2)
+    # Plot line plus markers so points are visible
+    ax.plot(recall, precision, lw=2, marker="o", markersize=4)
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
     ax.set_title(title)
 
     return fig
-
