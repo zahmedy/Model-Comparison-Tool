@@ -64,6 +64,104 @@ streamlit run app.py
 ```
 ----
 
+## Default Dataset: Breast Cancer Wisconsin
+
+## 🧠 Model Decision For Default Dataset
+
+### Problem Context
+This dataset represents a binary classification problem where both false positives and false negatives carry meaningful cost.  
+Rather than selecting a model based solely on accuracy, the decision was made by analyzing **ROC curves, Precision–Recall curves, and probability behavior**.
+
+---
+
+### Candidate Models
+The final comparison focused on:
+- **Support Vector Machine (SVM)**
+- **Logistic Regression**
+
+Both models achieved strong performance across standard metrics.
+
+---
+
+### ROC Curve Analysis
+Both SVM and Logistic Regression demonstrate excellent ROC curves, with AUC values close to 1.0.
+
+- This indicates that **both models rank positive samples above negative samples extremely well**
+- The difference in ROC-AUC between the two models is negligible and not statistically meaningful
+
+**Conclusion:**  
+ROC curves confirm strong separability but do not meaningfully differentiate the models.
+
+---
+
+### Precision–Recall Curve Analysis
+The Precision–Recall curves reveal important behavioral differences:
+
+- **SVM** maintains near-perfect precision across most recall values but exhibits a **sharp precision drop** when recall approaches its maximum
+- **Logistic Regression** shows a **more gradual and stable precision decline** as recall increases
+
+This suggests:
+- SVM is more **aggressive and confident**, but brittle at extreme thresholds
+- Logistic Regression provides **smoother and more reliable probability tradeoffs**
+
+---
+
+### Probability Calibration Considerations
+Logistic Regression produces naturally well-calibrated probabilities, making it safer for:
+- threshold tuning
+- cost-sensitive decisions
+- deployment scenarios where probability estimates are used directly
+
+SVM probabilities, while usable after proper pipeline handling, are more sensitive and often require explicit calibration.
+
+---
+
+### Final Decision
+**Logistic Regression** is selected as the preferred model for deployment.
+
+**Justification:**
+- Comparable accuracy and recall to SVM
+- Slightly stronger and more stable ROC-AUC
+- Better probability calibration
+- More predictable behavior when adjusting decision thresholds
+
+> When performance is similar, preference is given to models that provide stable probabilities and interpretable decision behavior.
+
+---
+
+### Summary
+This decision demonstrates the importance of:
+- evaluating models beyond accuracy
+- inspecting ROC and Precision–Recall curves
+- understanding probability behavior in real-world ML systems
+
+---
+
+### ROC Curves
+
+**Support Vector Machine**
+![SVM ROC](screenshots/SVM_ROC.png)
+
+**Logistic Regression**
+![Logistic Regression ROC](screenshots/LR_ROC.png)
+
+---
+
+### Precision–Recall Curves
+
+**Support Vector Machine**
+![SVM PR](screenshots/SVM_PR.png)
+
+**Logistic Regression**
+![Logistic Regression PR](screenshots/LR_PR.png)
+
+---
+
+### Comparison Summary
+
+**ALL MODELS**
+![Comparison Summary](screenshots/comparison_summary.png)
+
 ## End-to-End System Flow
 
 ### 1️⃣ Data Ingestion
