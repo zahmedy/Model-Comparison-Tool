@@ -159,7 +159,6 @@ This decision demonstrates the importance of:
 
 ### Comparison Summary
 
-**ALL MODELS**
 ![Comparison Summary](screenshots/comparison_summary.png)
 
 ## End-to-End System Flow
