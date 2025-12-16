@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from src.data_loader import load_csv
 from src.preprocess import split_data
 from src.models import get_models
@@ -105,12 +106,14 @@ def main():
             auc_value = None
             y_test_binary = (y_test == positive_class).astype(int)
             if hasattr(clf, "predict_proba"):
-                y_proba_all = clf.predict_proba(X_test)
+                y_proba_all = model.predict_proba(X_test)
                 classes_ = list(clf.classes_)
                 pos_idx = classes_.index(positive_class)
                 y_prob = y_proba_all[:, pos_idx]
+                st.write(name, "y_prob min/max:", float(y_prob.min()), float(y_prob.max()))
 
                 st.markdown("**ROC curve**")
+                print(name, "unique y_prob values:", np.unique(y_prob)[:10])
                 roc_fig = plot_roc_curve(y_test_binary, y_prob, title=f"ROC — {name}")
                 st.pyplot(roc_fig, use_container_width=True)
 
