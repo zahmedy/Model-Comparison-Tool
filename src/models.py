@@ -2,6 +2,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.svm import SVC
 
 
 def get_models():
@@ -36,7 +37,24 @@ def get_models():
         ]
     )
 
-    # 3. Gradient Boosting (additive trees, good for tabular data)
+    # 3. Support Vector Machine (RBF kernel with probabilities)
+    models["Support Vector Machine"] = Pipeline(
+        [
+            ("scaler", StandardScaler()),
+            (
+                "clf",
+                SVC(
+                    kernel="rbf",
+                    probability=True,
+                    C=1.5,
+                    gamma="scale",
+                    random_state=42,
+                ),
+            ),
+        ]
+    )
+
+    # 4. Gradient Boosting (additive trees, good for tabular data)
     models["Gradient Boosting"] = Pipeline(
         [
             ("scaler", StandardScaler()),

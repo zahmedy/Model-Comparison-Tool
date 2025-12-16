@@ -3,7 +3,13 @@ import pandas as pd
 from src.data_loader import load_csv
 from src.preprocess import split_data
 from src.models import get_models
-from sklearn.metrics import confusion_matrix, roc_auc_score
+from sklearn.metrics import (
+    confusion_matrix,
+    roc_auc_score,
+    precision_score,
+    recall_score,
+    f1_score,
+)
 from src.plots import plot_confusion_matrix, plot_roc_curve, plot_precision_recall
 
 
@@ -112,12 +118,22 @@ def main():
                 pr_fig = plot_precision_recall(y_test_binary, y_prob, title=f"PR — {name}")
                 st.pyplot(pr_fig, use_container_width=True)
 
-                auc_value = roc_auc_score(y_test_binary, y_prob)
+                auc_value = float(roc_auc_score(y_test_binary, y_prob))
             else:
                 st.info("Probability scores not available for this model.")
+                auc_value = float("nan")
 
             accuracy = float((y_pred == y_test).mean())
-            st.write(f"**Accuracy:** {accuracy:.3f}")
+            precision = float(precision_score(y_test, y_pred, average="weighted", zero_division=0))
+            recall = float(recall_score(y_test, y_pred, average="weighted", zero_division=0))
+            f1 = float(f1_score(y_test, y_pred, average="weighted", zero_division=0))
+
+            st.write(
+                f"**Accuracy:** {accuracy:.3f} | "
+                f"**Precision (weighted):** {precision:.3f} | "
+                f"**Recall (weighted):** {recall:.3f} | "
+                f"**F1 (weighted):** {f1:.3f}"
+            )
 
             cm = confusion_matrix(y_test, y_pred)
             class_names = sorted(y_test.unique().tolist())
@@ -128,6 +144,9 @@ def main():
                 {
                     "Model": name,
                     "Accuracy": accuracy,
+                    "Precision (weighted)": precision,
+                    "Recall (weighted)": recall,
+                    "F1 (weighted)": f1,
                     f"AUC (class {positive_class} vs rest)": auc_value,
                 }
             )
@@ -139,7 +158,13 @@ def main():
         results_df = pd.DataFrame(results).sort_values(by="Accuracy", ascending=False)
         st.dataframe(
             results_df.style.highlight_max(
-                subset=["Accuracy", f"AUC (class {positive_class} vs rest)"],
+                subset=[
+                    "Accuracy",
+                    "Precision (weighted)",
+                    "Recall (weighted)",
+                    "F1 (weighted)",
+                    f"AUC (class {positive_class} vs rest)",
+                ],
                 color="lightgreen",
             ),
             use_container_width=True,
